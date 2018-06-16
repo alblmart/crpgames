@@ -1,4 +1,7 @@
-mu = 15 # mu in {1, 3, 5, 8, 12, 15}
+print('''
+PRICE CAP GAME
+	''')
+mu = 1 # mu in {1, 3, 5, 8, 12, 15}
 import random
 
 bidders = {}
@@ -24,13 +27,12 @@ for b in bidders:		#participate function will need to be refined
 		'expProfit': bidders[b]['offer'] - bidders[b]['oppCost']}
 	else: 
 		#print(b, "No")
-		bidders[b]['offer'] = 'N/A'
-print('Bidders:', bidders)
+		bidders[b]['offer'] = 999
+#print('Bidders:', bidders)
 #print('Partipators:', participators)
 #print(bidders)
-
 orderedBidders = sorted(participators.items(), key = lambda i: i[1]['offer'])
-print(participators, orderedBidders)
+#print(participators, orderedBidders)
 orderedOppCosts = sorted(oppCostDict.items(), key = lambda i: i[1])
 winningBids = []
 profits = []
@@ -53,7 +55,53 @@ print('Average winning offer:', round(averageWinner,2))
 print('Average profit:', round(averageProfit,2))
 print('Overcost:', round(overcost,4))
 
+#ALLOCATIVE EFFICIENCY
 
+bidsAll = []
+lowestBids = {}
+highestBids = {}
+oppCostsAll = []
+lowestCosts = {}
+highestCosts = {}
+for b in bidders:
+	oppCostsAll.append(bidders[b]['oppCost'])
+	bidsAll.append(bidders[b]['offer'])
+SortedCosts = sorted(oppCostsAll)
+SortedBids = sorted(bidsAll)
+#print(SortedCosts, SortedCosts[7], SortedCosts[8])
+#print(SortedBids, SortedBids[7], SortedBids[8])
+#print('COST LOOP')
+for b in bidders:
+	if bidders[b]['oppCost'] <= SortedCosts[7]:
+		#print('yes', b, bidders[b]['oppCost'])
+		lowestCosts[b] = bidders[b]
+	else:
+		#print('no', b, bidders[b]['oppCost'])
+		highestCosts[b] = bidders[b]
+#print('BID LOOP')
+for b in bidders:
+	if bidders[b]['offer'] <= min(SortedBids[7], 110):
+		#print('yes', b, bidders[b]['offer'])
+		lowestBids[b] = bidders[b]
+	else:
+		#print('no', b, bidders[b]['offer'])
+		highestBids[b] = bidders[b]
+#print('>>lowest costs', lowestCosts)
+#print('>>highest costs', highestCosts)
+#print('>>lowest bids', lowestBids)
+#print('>>highest bids', highestBids)
+effCounter = 0
+for b in bidders:
+	if b in lowestCosts and b in lowestBids:
+		effCounter += 1
+	if b in lowestCosts and not b in lowestBids:
+		effCounter += 0
+	if b in highestCosts and b in highestBids:
+		effCounter += 1
+	if b in highestCosts and not b in highestBids:
+		effCounter += 0
+print('Allocative efficiency:', effCounter/16)
+		
 '''
 participation
 winning offers
@@ -61,6 +109,7 @@ allocative efficiency
 overcost
 profit
 '''
+
 
 
 
